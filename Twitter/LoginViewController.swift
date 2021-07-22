@@ -19,10 +19,11 @@ class LoginViewController: UIViewController {
     //function that will happen when the Login button is pressed
     @IBAction func loginButton(_ sender: Any) {
         let myUrl = "https://api.twitter.com/oauth/request_token"
-        TwitterAPICaller.client.login(url: myUrl, success: { performSegue(withIdentifier: loginToHome, sender: self)
+        TwitterAPICaller.client?.login(url: myUrl, success: { self.performSegue(withIdentifier: "loginToHome", sender: self)
         }, failure: {(Error) in
             print("Could not log in")
         })
+        //hello testing comment 
     }
     
     /*
