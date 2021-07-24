@@ -15,8 +15,19 @@ class LoginViewController: UIViewController {
 
         // Do any additional setup after loading the view.
     }
-    
+    //when view appears, check that the user is logged in
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if UserDefaults.standard.bool (forKey:"UserLoggedIn") == true
+        {
+            self.performSegue(withIdentifier: "loginToHome", sender: self)
+        }
+        
+        
+    }
     //function that will happen when the Login button is pressed
+    //in the function when user logs in we have to make sure
+    //they stay logged in
     @IBAction func loginButton(_ sender: Any) {
         let myUrl = "https://api.twitter.com/oauth/request_token"
         TwitterAPICaller.client?.login(url: myUrl, success: {

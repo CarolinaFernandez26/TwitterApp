@@ -9,13 +9,50 @@ import UIKit
 
 class HomeTableViewController: UITableViewController {
 
+    //var means a variable can change
+    // () means you start with empty array
+    var tweetArray = [NSDictionary] ()
+    var numberOfTweet: Int!
+    
     @IBAction func onLogout(_ sender: Any) {
         TwitterAPICaller.client?.logout()
         self.dismiss(animated: true, completion: nil)
+        
+        //set value for user logged in as false
+        UserDefaults.standard.set(false, forKey: "UserLoggedIn")
     }
+    
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "tweetCell" , for: indexPath) as!
+        TweetCellTableViewCell
+        
+        cell.userNameLabel.text = "some name"
+        cell.userNameLabel.text = "something else"
+        
+        return cell
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        func loadTweet()
+        {
+            let myURL = "https://api.twitter.com/1.1/statuses/home_timeline.json"
+            let myParams = ["count":10]
+            TwitterAPICaller.client?.getDictionariesRequest(url: myURL, parameters: myParams, success: { (tweets: [NSDictionary]) in
+                
+                //clean the list up and repopulate with new tweets
+                self.tweetArray.removeAll()
+                for tweet in tweets { //for every single tweet, add tweet to the array
+                    self.tweetArray.append(tweet)
+                    
+                }
+                
+            }, failure: {(Error) in print ("Could not retrieve tweet!")})
+        }
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -28,12 +65,12 @@ class HomeTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return 5
     }
 
     /*
