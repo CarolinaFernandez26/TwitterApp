@@ -6,13 +6,36 @@
 //
 
 import UIKit
-
+import AlamofireImage
 class HomeTableViewController: UITableViewController {
 
     //var means a variable can change
     // () means you start with empty array
     var tweetArray = [NSDictionary] ()
     var numberOfTweet: Int!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        loadTweet()
+    }
+    
+    func loadTweet()
+    {
+        let myURL = "https://api.twitter.com/1.1/statuses/home_timeline.json"
+        let myParams = ["count":10]
+        TwitterAPICaller.client?.getDictionariesRequest(url: myURL, parameters: myParams, success: { (tweets: [NSDictionary]) in
+            
+            //clean the list up and repopulate with new tweets
+            self.tweetArray.removeAll()
+            for tweet in tweets { //for every single tweet, add tweet to the array
+                self.tweetArray.append(tweet)
+                
+            }
+            
+            self.tableView.reloadData()
+            
+        }, failure: {(Error) in print ("Could not retrieve tweet!")})
+    }
     
     @IBAction func onLogout(_ sender: Any) {
         TwitterAPICaller.client?.logout()
@@ -27,39 +50,26 @@ class HomeTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "tweetCell" , for: indexPath) as!
         TweetCellTableViewCell
         
-        cell.userNameLabel.text = "some name"
-        cell.userNameLabel.text = "something else"
+        let user = tweetArray[indexPath.row]["user"] as! NSDictionary
+        //uses keys from API to find the value that corresponds to content of tweet and username
+        //"text" is the name of key for the content and "name" is the name of the key for the username name
+        cell.userNameLabel.text = user["name"] as? String
+        cell.tweetContent.text = tweetArray[indexPath.row]["text"] as? String
+        let imageUrl = URL(string: (user["profile_image_url_https"]as?String)!)
+        let data = try? Data(contentsOf:imageUrl!)
+        if let imageData = data{
+            cell.profileImageView.image = UIImage (data:imageData)
+        }
         
         return cell
     }
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
 
-        
-        func loadTweet()
-        {
-            let myURL = "https://api.twitter.com/1.1/statuses/home_timeline.json"
-            let myParams = ["count":10]
-            TwitterAPICaller.client?.getDictionariesRequest(url: myURL, parameters: myParams, success: { (tweets: [NSDictionary]) in
-                
-                //clean the list up and repopulate with new tweets
-                self.tweetArray.removeAll()
-                for tweet in tweets { //for every single tweet, add tweet to the array
-                    self.tweetArray.append(tweet)
-                    
-                }
-                
-            }, failure: {(Error) in print ("Could not retrieve tweet!")})
-        }
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-    }
 
     // MARK: - Table view data source
 
@@ -70,7 +80,7 @@ class HomeTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 5
+        return tweetArray.count
     }
 
     /*
