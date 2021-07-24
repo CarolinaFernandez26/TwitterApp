@@ -26,8 +26,10 @@ class HomeTableViewController: UITableViewController {
     
     @objc func loadTweet()
     {
+        
+        numberOfTweet = 20
         let myURL = "https://api.twitter.com/1.1/statuses/home_timeline.json"
-        let myParams = ["count":10]
+        let myParams = ["count":numberOfTweet]
         TwitterAPICaller.client?.getDictionariesRequest(url: myURL, parameters: myParams, success: { (tweets: [NSDictionary]) in
             
             //clean the list up and repopulate with new tweets
@@ -42,6 +44,36 @@ class HomeTableViewController: UITableViewController {
             self.myRefreshControl.endRefreshing()
             
         }, failure: {(Error) in print ("Could not retrieve tweet!")})
+    }
+    
+    func loadMoreTweets() {
+        let myURL = "https://api.twitter.com/1.1/statuses/home_timeline.json"
+        
+        numberOfTweet = numberOfTweet + 20
+        let myParams = ["count": numberOfTweet]
+        TwitterAPICaller.client?.getDictionariesRequest(url: myURL, parameters: myParams, success: { (tweets: [NSDictionary]) in
+            
+            //clean the list up and repopulate with new tweets
+            self.tweetArray.removeAll()
+            for tweet in tweets { //for every single tweet, add tweet to the array
+                self.tweetArray.append(tweet)
+                
+            }
+            
+            self.tableView.reloadData()
+            //once done updating table, you want to end refreshing
+            self.myRefreshControl.endRefreshing()
+            
+        }, failure: {(Error) in print ("Could not retrieve tweet!")})
+        
+    }
+    
+    
+    //loading more tweets when user gets to end of the table
+    override func tableView(_ tableView:UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath:IndexPath){
+        if indexPath.row + 1 == tweetArray.count{
+            loadMoreTweets()
+        }
     }
     
     @IBAction func onLogout(_ sender: Any) {
