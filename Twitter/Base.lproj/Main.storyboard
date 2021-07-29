@@ -91,6 +91,9 @@
                                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="30" id="z5P-I5-WjD"/>
                                             </constraints>
                                             <state key="normal" title="Button" image="favor-icon-1"/>
+                                            <connections>
+                                                <action selector="favoriteTweet:" destination="8hv-pv-NXz" eventType="touchUpInside" id="DFQ-Kq-NRg"/>
+                                            </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ilE-XU-4JD" userLabel="RTButton">
                                             <rect key="frame" x="329" y="110" width="30" height="30"/>
@@ -104,6 +107,9 @@
                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="zVP-wn-RI8"/>
                                             </constraints>
                                             <state key="normal" title="Button" image="retweet-icon"/>
+                                            <connections>
+                                                <action selector="retweetTweet:" destination="8hv-pv-NXz" eventType="touchUpInside" id="keR-7a-SMO"/>
+                                            </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Tweet Content" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="YF6-yn-j1o">
                                             <rect key="frame" x="83" y="41" width="281" height="61"/>
@@ -146,7 +152,9 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="favButton" destination="egk-aW-2JZ" id="4cn-mZ-hqw"/>
                                     <outlet property="profileImageView" destination="Fcm-hN-34Q" id="jX8-5a-ePk"/>
+                                    <outlet property="retweetButton" destination="ilE-XU-4JD" id="FHN-F3-b66"/>
                                     <outlet property="tweetContent" destination="YF6-yn-j1o" id="U1w-q6-p6m"/>
                                     <outlet property="userNameLabel" destination="FSR-iJ-e8w" id="vhR-qp-VTa"/>
                                 </connections>

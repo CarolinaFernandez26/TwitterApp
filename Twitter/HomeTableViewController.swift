@@ -22,6 +22,8 @@ class HomeTableViewController: UITableViewController {
         //implement refresh control by calling load tweet
         myRefreshControl.addTarget(self, action: #selector(loadTweet), for: .valueChanged)
         tableView.refreshControl = myRefreshControl
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.estimatedRowHeight = 150
     }
     
     override func viewDidAppear(_ animated: Bool) {
